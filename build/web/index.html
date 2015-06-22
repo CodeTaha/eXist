@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Searching on Movies</title>
+        <link href="css/bootstrap.css" rel="stylesheet">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h3>For Shakespeare <a href='shakespeare.html'>click here</a></h3>
+        <h2>Enter your search Keyword and select the option to search from</h2>
+        <form>
+            <label>Enter Search Keyword</label>
+            <input type="text" name="search_keyword" id="search_keyword"/>
+            <select name="search_type" id="search_type">
+                <option value='title'>Title</option>
+                <option value='director'>Director</option>
+                <option value='summary'>Description</option>
+                <option value='actor'>Actor</option>
+                <option value='genre'>Genre</option>
+                <option value='year'>Year</option>
+                <option value='country'>Country</option>
+            </select>
+            <button type="button" id="submit" onclick="search()">Search</button>
+        </form>
+        <div id='content'></div>
+        <script src='js/jquery.js'></script>
+        <script src='js/bootstrap.js'></script>
+        <script>
+            var search=function(){
+              var search_keyword=$("#search_keyword").val();
+              var search_type=$("#search_type").val();
+              /*$.getJSON("main_Controller?fn=1",
+		function(json) {
+                    
+                    
+                });*/
+                
+               $.ajax({
+           type: "GET",       // the dNodeNameefault
+           url: "main_Controller?fn=1",
+           data: {search_keyword:search_keyword,search_type:search_type},
+           success: function(data){
+               console.log(data);
+               $("#content").empty();
+               $("#content").append(data);
+           }});
+       
+            };
+       
+
+
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,114 @@
+<html>
+    <head>
+        <title>Shakespeare</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/bootstrap.css" rel="stylesheet">
+        <style>
+            table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+tr, #play_titles
+{
+     cursor: pointer;
+}
+        </style>
+    </head>
+    <body>
+        <h4>For Movies <a href='index.html'>click here</a></h4>
+        <h2>Shakespeare's Works</h2>
+        
+        <div id='play_titles'></div>
+        <div id="play_Content" class="container-fluid">
+            <div id="play_Title" class="row"></div>
+            <div class='row' id='search_char'>
+                <label>Enter the name of the character to search his acts and scenes </label>
+                <input type='text' id='char_name'/>
+                <button type='button' onclick='searchChar()'>SEARCH</button>
+            </div>
+            <div class="row">
+            <div id="play_Characters" class="col-md-6"></div>
+            <div id="play_Acts" class="col-md-6"></div>
+            </div>
+            <div class="row well" id='content'></div>
+        </div>
+        <script src='js/jquery.js'></script>
+        <script src='js/bootstrap.js'></script>
+        <script>
+            var Play="";
+            $(document).ready(function()
+            {
+                $("#search_char").hide();
+               $.ajax({
+                    type: "GET",       // the dNodeNameefault
+                    url: "main_Controller?fn=3",
+                    data: {},
+                    success: function(data)
+                        {
+                        console.log(data);
+                        $("#play_titles").empty();
+                        $("#play_titles").append(data);
+                        }
+                    });
+            });
+            
+            var getPlayData=function(playTitle)
+                {Play=playTitle;
+                    $("#search_char").hide();
+                    $.ajax({
+                            type: "GET",       // the dNodeNameefault
+                            url: "main_Controller",
+                            data: {fn:4,playTitle:playTitle},
+                            success: function(data){
+                                console.log(JSON.parse(data));
+                                var jsonData=JSON.parse(data);
+                                $("#play_Title").empty();
+                                $("#play_Title").append("<center><h2>"+playTitle+"</h2></center>");
+                                $("#play_Characters").empty();
+                                $("#play_Characters").append(jsonData[0]);
+                                $("#play_Acts").empty();
+                                $("#play_Acts").append(jsonData[1]);
+                                $("#search_char").show();
+                            }});
+                    
+                    
+                };
+            var getScene=function(playTitle,sceneTitle,selection)
+                {
+                    $.ajax({
+                            type: "GET",       // the dNodeNameefault
+                            url: "main_Controller",
+                            data: {fn:5,playTitle:playTitle,sceneTitle:sceneTitle,selection:selection},
+                            success: function(data){
+                                console.log(data);
+                                $("#content").empty();
+                                $("#content").append(data);
+                            }});
+                }
+    var searchChar=function()
+    {
+        var char_name=$("#char_name").val();
+        $.ajax({
+           type: "GET",       // the dNodeNameefault
+           url: "main_Controller",
+           data: {fn:6,play:Play,char_name:char_name},
+           success: function(data){
+               console.log(data);
+               $("#content").empty();
+               $("#content").append(data);
+           }});
+    }
+    
+       
+       
+
+
+
+        </script>
+    </body>
+</html>
